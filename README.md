@@ -36,6 +36,9 @@ https://github.com/andrewjpage/tiptoft
 Database of plasmid
 https://ccb-microbe.cs.uni-saarland.de/plsdb/
 
+Database of plasmid
+https://github.com/itsmeludo/COMPASS
+
 plasmid typing
 https://github.com/aldertzomer/RFPlasmid
 

@@ -42,6 +42,10 @@ https://github.com/itsmeludo/COMPASS
 plasmid typing
 https://github.com/aldertzomer/RFPlasmid
 
+Plasmid classifier
+
+https://github.com/santirdnd/COPLA
+
 plasmid detection + typing
 mobsuite
 

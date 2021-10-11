@@ -1,11 +1,6 @@
 # long-reads
 AMR detection in uncorrected long reads
 
-
-# long-reads
-AMR detection in uncorrected long reads
-
-
 Input is uncorrected(?)/corrected nanopore sequenced reads. 
 
 Simulated reads: 

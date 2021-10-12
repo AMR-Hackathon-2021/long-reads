@@ -1,52 +1,38 @@
 # long-reads
-AMR detection in uncorrected long reads
 
-Input is uncorrected(?)/corrected nanopore sequenced reads. 
+AMR detection in uncorrected long reads. Input is uncorrected/corrected nanopore sequenced reads. 
 
-Simulated reads: 
-
-* https://github.com/bcgsc/NanoSim
-* https://github.com/LomanLab/mockcommunity 
-
-Just do Ryanwick for error correction (ML?)
-
+See [Docs](docs/README.md)
 
 ## Method
 
-locate amr genes. 
+* locate amr genes. 
 
-fetch long reads. 
+* fetch long reads. 
 
-consensus. 
+* consensus. 
 
 ## Output
 
-output is the sytenic block of ARGs
-mutuations in those genes. 
+* Output is the sytenic block of ARGs, mutuations in those genes. 
 
-plasmid typing on reads associated with the ARGs. 
+* Plasmid typing on reads associated with the ARGs. 
 
-Plot options - Artemis looking output. 
+* Plot options - Artemis looking output. 
 
 ## Previous & related tools: 
 
-plasmid typing from long reads 
-https://github.com/andrewjpage/tiptoft
+* plasmid typing from long reads: [andrewjpage/tiptoft](https://github.com/andrewjpage/tiptoft)
 
-Database of plasmid
-https://ccb-microbe.cs.uni-saarland.de/plsdb/
+* Database of plasmid: [plsdb](https://ccb-microbe.cs.uni-saarland.de/plsdb/)
 
-Database of plasmid
-https://github.com/itsmeludo/COMPASS
+* Database of plasmid: [itsmeludo/COMPASS](https://github.com/itsmeludo/COMPASS)
 
-plasmid typing
-https://github.com/aldertzomer/RFPlasmid
+* Plasmid typing: [aldertzomer/RFPlasmid](https://github.com/aldertzomer/RFPlasmid)
 
-Plasmid classifier
-https://github.com/santirdnd/COPLA
+* Plasmid classifier: [santirdnd/COPLA](https://github.com/santirdnd/COPLA)
 
-plasmid detection + typing
-mobsuite
+* Plasmid detection + typing: [MobSuite](mobsuite)
 
 ## Output libraries 
 

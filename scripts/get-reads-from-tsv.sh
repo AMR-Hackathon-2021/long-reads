@@ -22,19 +22,20 @@ INPUT_FILE=$REPO_DIR/docs/datasets-PRJEB47011.tsv
 OUTPUT_DIR=$REPO_DIR/datasets/ecoli-reads-PRJEB47011
 VERBOSE=0
 NUM_SAMPLES=0
-
+QUERY_STRING=""
 # Print help funciton
 print_help() {
     echo "Download the E. coli reads from EBI ENA"
     echo "Usage: get-ecoli-reads.sh [-v] [-i <input_file>] [-o <output_dir>]"
     echo ""
     echo "  -v:     verbose"
+    echo "  -q STR: Require STR in URL"
     echo "  -i TSV: input file with the URLs in EBI ENA tsv format [default: $INPUT_FILE]"
     echo "  -o DIR: output directory [default: $OUTPUT_DIR]"
     echo "  -n INT: Stop after downloading INT samples"
 }
 
-while getopts ":vhi:o:n:" opt; do
+while getopts ":vhi:o:n:q:" opt; do
   case $opt in
     v)
       VERBOSE=1
@@ -47,6 +48,9 @@ while getopts ":vhi:o:n:" opt; do
       ;;
     n)
       NUM_SAMPLES=$OPTARG
+      ;;
+    q)
+      QUERY_STRING="$OPTARG"
       ;;
     h)
         print_help
@@ -109,6 +113,11 @@ while IFS=$'\t' read -r -a line; do
     # Split $FTP on the ";"
     IFS=';' read -ra ADDR <<< "$FTP"
     for URL in "${ADDR[@]}"; do
+        # Skip if URL does not contain $QUERY_STRING
+        if [[ $QUERY_STRING != "" && ! "$URL" =~ $QUERY_STRING ]]; then
+            echo "Skipping $URL: $QUERY_STRING not matched"
+            continue
+        fi
         echo Downloading $URL
         # Download file from FTP url
         wget -P "$OUTPUT_DIR" "$URL"

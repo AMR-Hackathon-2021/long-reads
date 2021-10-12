@@ -1,3 +1,5 @@
+[![AMR Long Reads](docs/amr-long-reads.png)](https://github.com/AMR-Hackathon-2021/long-reads#readme)
+
 # long-reads
 
 AMR detection in uncorrected long reads. Input is uncorrected/corrected nanopore sequenced reads. 

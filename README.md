@@ -22,6 +22,8 @@ See [Docs](docs/README.md)
 
 * Plot options - Artemis looking output. 
 
+* Circularity of contig with detected AMR gene?
+
 ## Previous & related tools: 
 
 * plasmid typing from long reads: [andrewjpage/tiptoft](https://github.com/andrewjpage/tiptoft)

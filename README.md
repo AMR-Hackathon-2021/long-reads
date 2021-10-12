@@ -22,7 +22,7 @@ See [Docs](docs/README.md)
 
 * Plot options - Artemis looking output. 
 
-* Circularity of contig with detected AMR gene?
+* Circularity of reads with detected AMR gene?
 
 ## Previous & related tools: 
 

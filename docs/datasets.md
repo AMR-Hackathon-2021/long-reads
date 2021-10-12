@@ -8,6 +8,7 @@ and the reference sequences to produce
 ## Real datasets
 
 * [LomanLab/mockcommunity](https://github.com/LomanLab/mockcommunity) 
+* [PRJEB47011](https://www.ebi.ac.uk/ena/browser/view/PRJEB47011?show=reads) - Raw Nanopore reads from mcr-1 positive _E. coli_. 
 
 ## Simulated datasets
 

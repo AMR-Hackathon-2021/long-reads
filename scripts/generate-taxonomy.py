@@ -24,7 +24,7 @@ def namesHeader():
     """
     return "\t|\t".join(["1", "root", "", "scientific name"]) + "\t|"
 
-def makeNode(tax_id, parent=1, rank="genus"):
+def makeNode(tax_id, parent=1, rank="genus", division_id=11):
     """
     0 tax_id					-- node id in GenBank taxonomy database
  	1 parent tax_id				-- parent node id in GenBank taxonomy database
@@ -45,7 +45,7 @@ def makeNode(tax_id, parent=1, rank="genus"):
         parent, # 1 parent tax_id
         rank,   # 2 rank
         "",    # 3 embl code
-        "",   # 4 division id 
+        division_id,   # 4 division id 
         "",  # 5 inherited div flag 
         "", # 6 genetic code id 
         "", # 7 inherited GC  flag 
@@ -98,30 +98,37 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-i', '--input', required=True,
                         help='Sequences in FASTA format')
-    parser.add_argument('-o', '--outdir', required=True, help='Output directory')
+    parser.add_argument('-o', '--db', required=True, help='Output directory (kraken db)')
     parser.add_argument('-s', '--split', required=False, help='Split sequence name on this char')
     parser.add_argument('-f', '--field', required=False, help='Select this field on the name (requires --split)')
-    parser.add_argument('-r', '--regex', required=False, help='n/a')
+    parser.add_argument('-m', '--make', required=False, help='Make database')
+    #parser.add_argument('-r', '--regex', required=False, help='n/a')
     
-    parser.add_argument('--taxonomy-field', required=False, default="authority", help="Selector for names.dmp [default: authority]")
     args = parser.parse_args()
 
     if args.split and not args.field:
         parser.error("--field and --split are both required.")
 
+    taxonomy_dir = os.path.join(args.db, "taxonomy")
     # Create output directory
-    if not os.path.exists(args.outdir):
+    if not os.path.exists(args.db):
         try:
-            os.makedirs(args.outdir)
-        except OSError as exc: # Guard against
+            os.makedirs(args.db)
+        except OSError as exc: 
             eprint("Error creating output directory:", exc)
             sys.exit(1)
-    
+    if not os.path.exists(taxonomy_dir):
+        try:
+            os.makedirs(taxonomy_dir)
+        except OSError as exc: 
+            eprint("Error creating output directory (taxonomy):", exc)
+            sys.exit(1)    
+
     # Create taxonomy file: names.dmp
-    names_file = os.path.join(args.outdir, "names.dmp")
-    nodes_file = os.path.join(args.outdir, "nodes.dmp")
-    gi_file    = os.path.join(args.outdir, "nucl_gb.accession2taxid")
-    seq_file =   os.path.join(args.outdir, "sequences.fa")
+    names_file = os.path.join(args.db, "taxonomy", "names.dmp")
+    nodes_file = os.path.join(args.db, "taxonomy", "nodes.dmp")
+    gi_file    = os.path.join(args.db, "taxonomy", "nucl_gb.accession2taxid")
+    seq_file =   os.path.join(args.db, "sequences.fa")
 
     # Create nodes and names file handles
     namesFh = open(names_file, "w")
@@ -139,9 +146,10 @@ if __name__ == '__main__':
         #>gb|JN967644|+|0-813|ARO:3002356|NDM-6 [Escherichia coli]
         # search for [Species name] in the name
         seqname = name.split(" ")[0].split("\t")[0]
-
+        
         seqId += 1
 
+        # TODO expand sequence name handling 
         if args.split:
             seqname = seqname.split(args.split)[int(args.field) - 1]
 
@@ -149,13 +157,18 @@ if __name__ == '__main__':
         print(makeName(seqId, seqname), file=namesFh)
         print(makeGi(seqId, seqname), file=giFh)
         print(f">{seqname}|kraken:taxid|{seqId}\n{seq}", file=seqFh)
-        
-"""
-The names.dmp file should have these columns with these delimiters:
-"taxid\t|\tdisplay_name\t|\t-\t|\tscientific name\t|\n"
-9606 | Homo sapiens |  | scientific name | 
 
-The nodes.dmp file should have these columns with these delimiters:
-"taxid\t|\tparent_taxid\t|\trank\t|\t-\t|\n"
-1 | 1 | no ranx |
-"""
+    if args.make:
+        import subprocess
+        
+        try:
+            subprocess.call(["kraken-build", "--db", args.db, "--threads", str(args.threads), "--add-to-library", seq_file])
+        except Exception as e:
+            eprint("Error building kraken database:", e)
+            sys.exit(1)
+        
+        try:
+           subprocess.call(["kraken-build", "--db", args.db, "--threads", str(args.threads), "--build"])
+        except Exception as e:
+            eprint("Error building kraken database:", e)
+            sys.exit(1)

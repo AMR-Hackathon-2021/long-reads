@@ -14,58 +14,60 @@ import gzip
 def nodesHeader():
     """
     Return header for nodes.dmp file
+    1|1|no rank||8|0|1|0|0|0|0|0||
     """
-    return " | ".join(["1", "1", "no rank", "", "", "", "", "", "", "", "", "", ""])
+    return "\t|\t".join(["1", "1", "no rank", "", "8", "0", "1", "0", "0", "0", "0", "0", ""])  + "\t|"
 
 def namesHeader():
     """
     Return header for names.dmp file
     """
-    return "|".join(["1", "root", "", "scientific name"])
+    return "\t|\t".join(["1", "root", "", "scientific name"]) + "\t|"
 
 def makeNode(tax_id, parent=1, rank="genus"):
     """
-    tax_id					-- node id in GenBank taxonomy database
- 	parent tax_id				-- parent node id in GenBank taxonomy database
- 	rank					-- rank of this node (superkingdom, kingdom, ...) 
- 	embl code				-- locus-name prefix; not unique
- 	division id				-- see division.dmp file
- 	inherited div flag  (1 or 0)		-- 1 if node inherits division from parent
- 	genetic code id				-- see gencode.dmp file
- 	inherited GC  flag  (1 or 0)		-- 1 if node inherits genetic code from parent
- 	mitochondrial genetic code id		-- see gencode.dmp file
- 	inherited MGC flag  (1 or 0)		-- 1 if node inherits mitochondrial gencode from parent
- 	GenBank hidden flag (1 or 0)            -- 1 if name is suppressed in GenBank entry lineage
- 	hidden subtree root flag (1 or 0)       -- 1 if this subtree has no sequence data yet
- 	comments				-- free-text comments and citations
+    0 tax_id					-- node id in GenBank taxonomy database
+ 	1 parent tax_id				-- parent node id in GenBank taxonomy database
+ 	2 rank					-- rank of this node (superkingdom, kingdom, ...) 
+ 	3 embl code				-- locus-name prefix; not unique
+ 	4 division id				-- see division.dmp file
+ 	5 inherited div flag  (1 or 0)		-- 1 if node inherits division from parent
+ 	6 genetic code id				-- see gencode.dmp file
+ 	7 inherited GC  flag  (1 or 0)		-- 1 if node inherits genetic code from parent
+ 	8 mitochondrial genetic code id		-- see gencode.dmp file
+ 	9 inherited MGC flag  (1 or 0)		-- 1 if node inherits mitochondrial gencode from parent
+ 	10 GenBank hidden flag (1 or 0)            -- 1 if name is suppressed in GenBank entry lineage
+ 	11 hidden subtree root flag (1 or 0)       -- 1 if this subtree has no sequence data yet
+ 	12 comments				-- free-text comments and citations
     """
     data = [
-        tax_id,
-        parent,
-        rank,
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""]
+        tax_id, # 0 tax_id
+        parent, # 1 parent tax_id
+        rank,   # 2 rank
+        "",    # 3 embl code
+        "",   # 4 division id 
+        "",  # 5 inherited div flag 
+        "", # 6 genetic code id 
+        "", # 7 inherited GC  flag 
+        "", # 8 mitochondrial genetic code id 
+        "", # 9 inherited MGC flag 
+        "", # 10 GenBank hidden flag 
+        "", # 11 hidden subtree root flag 
+        ""] # 12 comments
 
     # convert every data element to string
     data = [str(x) for x in data]
-    return " | ".join(data)
+    return "\t|\t".join(data) + "\t|"
 
 def makeName(taxid, name):
-    return " | ".join([str(taxid), str(name), "", "scientific name"])
+    return "\t|\t".join([str(taxid), str(name), "", "scientific name"]) + "\t|"
 
 def giHeader():
-    return "\t".join(["accession", "accession.version", "taxid", "gi"])
+    return "\t".join(["accession", "accession.version", "taxid", "gi"]) + "\t|"
 
 def makeGi(taxid, name):
-    return "\t".join([name, name, str(taxid), str(taxid)])
+    return "\t".join([name, name, str(taxid), str(taxid)]) + "\t|"
+    
 def eprint(*args, **kwargs):
     """
     Print to STDERR

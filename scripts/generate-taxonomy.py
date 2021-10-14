@@ -92,9 +92,15 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', required=True,
                         help='Sequences in FASTA format')
     parser.add_argument('-o', '--outdir', required=True, help='Output directory')
-    parser.add_argument('-r', '--regex', required=False, help='Nodes file')
+    parser.add_argument('-s', '--split', required=False, help='Split sequence name on this char')
+    parser.add_argument('-f', '--field', required=False, help='Select this field on the name (requires --split)')
+    parser.add_argument('-r', '--regex', required=False, help='n/a')
+    
     parser.add_argument('--taxonomy-field', required=False, default="authority", help="Selector for names.dmp [default: authority]")
     args = parser.parse_args()
+
+    if args.split and not args.field:
+        parser.error("--field and --split are both required.")
 
     # Create output directory
     if not os.path.exists(args.outdir):
@@ -126,10 +132,13 @@ if __name__ == '__main__':
         seqname = name.split(" ")[0].split("\t")[0]
 
         seqId += 1
+        
+        if args.split:
+            seqname = seqname.split(args.split)[args.field]
 
         print(makeNode(seqId), file=nodesFh,)
         print(makeName(seqId, seqname), file=namesFh)
-        print(f">{name}|kraken:taxid|{seqId}\n{seq}", file=seqFh)
+        print(f">{seqname}|kraken:taxid|{seqId}\n{seq}", file=seqFh)
         
 """
 The names.dmp file should have these columns with these delimiters:

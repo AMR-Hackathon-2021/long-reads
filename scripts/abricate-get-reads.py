@@ -66,6 +66,11 @@ class Read(object):
             'T': 'A'}
         return Read(self.name, "".join([complement[base] for base in self.seq[::-1]]), self.qual[::-1])
 
+def eprint(*args, **kwargs):
+    """
+    Print to stderr
+    """
+    print(*args, file=sys.stderr, **kwargs)
 
 def getBamAndTabFiles(directory):
     """
@@ -123,7 +128,7 @@ def getReadsFromCoordinates(bamfile, chrname, start, end):
         if start + read.infer_query_length() < end:
             # This read is not fully contained in the region
             continue
-        
+
         comment = f"chr={read.reference_name};mapq={read.mapping_quality};"
         seq = read.get_forward_sequence()
         qual = read.get_forward_qualities()
@@ -142,6 +147,7 @@ def getReadsFromCoordinates(bamfile, chrname, start, end):
             yield fastqread
         except ValueError:
             sys.stderr.write("WARNING: Read {} has different sequence and quality length\n".format(name))
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -209,18 +215,19 @@ if __name__ == '__main__':
     # Remove predictions with coverage or identity below thresholds
     amr_table = amr_table[amr_table['%COVERAGE'] >= args.min_cov]
     amr_table = amr_table[amr_table['%IDENTITY'] >= args.min_id]
-    # Remove predictions where PRODUCT does not contain args.gene
 
+    # Remove predictions where PRODUCT does not contain args.gene
     if args.gene:
         amr_table = amr_table[amr_table['PRODUCT'].str.contains(args.gene)]
 
     # apply getReadsFromCoordinates to each row of the table
     for index, row in amr_table.iterrows():
         if args.verbose:
-            print("Processing {}".format(row['PRODUCT']))
+            eprint("Processing {}".format(row['PRODUCT']))
+            
         if args.out_dir:
-           
             outfile = os.path.join(args.out_dir, row[(args.format).upper()] + '.fastq')
+
             # open outfile for writing
             try:
                 outfile = open(outfile, 'w')

@@ -98,3 +98,4 @@ if __name__ == '__main__':
         if len(species) > 0:
             comment = " " + species
         print(">" + seqname + "|kraken:taxid|" + taxid + comment)
+        print(seq)

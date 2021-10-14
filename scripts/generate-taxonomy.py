@@ -132,9 +132,9 @@ if __name__ == '__main__':
         seqname = name.split(" ")[0].split("\t")[0]
 
         seqId += 1
-        
+
         if args.split:
-            seqname = seqname.split(args.split)[args.field]
+            seqname = seqname.split(args.split)[int(args.field) - 1]
 
         print(makeNode(seqId), file=nodesFh,)
         print(makeName(seqId, seqname), file=namesFh)

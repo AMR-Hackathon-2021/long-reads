@@ -15,7 +15,7 @@ def nodesHeader():
     """
     Return header for nodes.dmp file
     """
-    return "|".join(["1", "1", "no rank", "", "", "", "", "", "", "", "", "", ""])
+    return " | ".join(["1", "1", "no rank", "", "", "", "", "", "", "", "", "", ""])
 
 def namesHeader():
     """
@@ -54,10 +54,12 @@ def makeNode(tax_id, parent=1, rank="genus"):
         "",
         ""]
 
+    # convert every data element to string
+    data = [str(x) for x in data]
     return " | ".join(data)
 
 def makeName(taxid, name):
-    return " | ".join([taxid, name, "", "scientific name"])
+    return " | ".join([str(taxid), str(name), "", "scientific name"])
 
 def eprint(*args, **kwargs):
     """
@@ -120,7 +122,7 @@ if __name__ == '__main__':
         seqname = name.split(" ")[0].split("\t")[0]
         seqId += 1
 
-        print(makeNode(seqId, seqname), file=nodesFh,)
+        print(makeNode(seqId), file=nodesFh,)
         print(makeName(seqId, seqname), file=namesFh)
         
 """

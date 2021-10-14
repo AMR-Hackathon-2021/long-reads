@@ -63,11 +63,11 @@ def makeName(taxid, name):
     return "\t|\t".join([str(taxid), str(name), "", "scientific name"]) + "\t|"
 
 def giHeader():
-    return "\t".join(["accession", "accession.version", "taxid", "gi"]) + "\t|"
+    return "\t".join(["accession", "accession.version", "taxid", "gi"]) 
 
 def makeGi(taxid, name):
-    return "\t".join([name, name, str(taxid), str(taxid)]) + "\t|"
-    
+    return "\t".join([name, name, str(taxid), str(taxid)])
+
 def eprint(*args, **kwargs):
     """
     Print to STDERR

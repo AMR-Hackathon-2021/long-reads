@@ -61,6 +61,11 @@ def makeNode(tax_id, parent=1, rank="genus"):
 def makeName(taxid, name):
     return " | ".join([str(taxid), str(name), "", "scientific name"])
 
+def giHeader():
+    return "\t".join(["accession", "accession.version", "taxid", "gi"])
+
+def makeGi(taxid, name):
+    return "\t".join([name, name, str(taxid), str(taxid)])
 def eprint(*args, **kwargs):
     """
     Print to STDERR
@@ -113,16 +118,18 @@ if __name__ == '__main__':
     # Create taxonomy file: names.dmp
     names_file = os.path.join(args.outdir, "names.dmp")
     nodes_file = os.path.join(args.outdir, "nodes.dmp")
+    gi_file    = os.path.join(args.outdir, "nucl_gb.accession2taxid")
     seq_file =   os.path.join(args.outdir, "sequences.fa")
 
     # Create nodes and names file handles
     namesFh = open(names_file, "w")
     nodesFh = open(nodes_file, "w")
+    giFh    = open(gi_file, "w")
     seqFh   = open(seq_file, "w")
 
     print( nodesHeader(), file=nodesFh)
     print( namesHeader(), file=namesFh)
-  
+    print( giHeader(), file=giFh)
     # Parse fasta
     seqId = 2
 
@@ -138,6 +145,7 @@ if __name__ == '__main__':
 
         print(makeNode(seqId), file=nodesFh,)
         print(makeName(seqId, seqname), file=namesFh)
+        print(makeGi(seqId, seqname), file=giFh)
         print(f">{seqname}|kraken:taxid|{seqId}\n{seq}", file=seqFh)
         
 """

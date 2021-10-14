@@ -92,6 +92,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', required=True,
                         help='Sequences in FASTA format')
     parser.add_argument('-o', '--outdir', required=True, help='Output directory')
+    parser.add_argument('-r', '--regex', required=False, help='Nodes file')
     parser.add_argument('--taxonomy-field', required=False, default="authority", help="Selector for names.dmp [default: authority]")
     args = parser.parse_args()
 
@@ -106,35 +107,36 @@ if __name__ == '__main__':
     # Create taxonomy file: names.dmp
     names_file = os.path.join(args.outdir, "names.dmp")
     nodes_file = os.path.join(args.outdir, "nodes.dmp")
+    seq_file =   os.path.join(args.outdir, "sequences.fa")
 
     # Create nodes and names file handles
     namesFh = open(names_file, "w")
     nodesFh = open(nodes_file, "w")
+    seqFh   = open(seq_file, "w")
 
     print( nodesHeader(), file=nodesFh)
     print( namesHeader(), file=namesFh)
   
     # Parse fasta
-    seqId = 0
+    seqId = 2
+
     for name, seq in fasta_iter(args.input):
         #>gb|JN967644|+|0-813|ARO:3002356|NDM-6 [Escherichia coli]
-        # search for [SPecies Name] in the name
+        # search for [Species name] in the name
         seqname = name.split(" ")[0].split("\t")[0]
+
         seqId += 1
 
         print(makeNode(seqId), file=nodesFh,)
         print(makeName(seqId, seqname), file=namesFh)
+        print(f">{name}|kraken:taxid|{seqId}\n{seq}", file=seqFh)
         
 """
 The names.dmp file should have these columns with these delimiters:
 "taxid\t|\tdisplay_name\t|\t-\t|\tscientific name\t|\n"
 9606 | Homo sapiens |  | scientific name | 
+
 The nodes.dmp file should have these columns with these delimiters:
 "taxid\t|\tparent_taxid\t|\trank\t|\t-\t|\n"
 1 | 1 | no ranx |
-
-
-
-
-
 """

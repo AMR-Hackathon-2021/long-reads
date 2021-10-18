@@ -6,17 +6,17 @@ AMR detection in uncorrected long reads. Input is uncorrected/corrected nanopore
 
 See [Docs](docs/README.md)
 
-## Method
+## A possible approach
 
-* locate amr genes. 
+* Locate AMR genes. 
 
-* fetch long reads. 
+* Fetch long reads. 
 
-* consensus. 
+* Consensus. 
 
 ## Output
 
-* Output is the sytenic block of ARGs, mutuations in those genes. 
+* Sytenic block of ARGs, mutuations in those genes. 
 
 * Plasmid typing on reads associated with the ARGs. 
 
@@ -44,6 +44,5 @@ See [Docs](docs/README.md)
 * https://github.com/gamcil/clinker
 * https://cran.r-project.org/web/packages/gggenes/vignettes/introduction-to-gggenes.html
  
-## TODOS: 
 
-Please add 
+
